@@ -65,7 +65,7 @@ const Slider: React.FC = () => {
     : [...sliderData.sliders, ...sliderData.sliders];
 
   return (
-    <div className="relative w-full h-screen top-28 mb-32 overflow-hidden group">
+    <div className="relative w-full h-screen top-28 overflow-hidden group">
       <Swiper
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
