@@ -31,12 +31,12 @@ const BeautySection = () => {
       <div className="p-8 font-sans">
         {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold tracking-tight text-black">
+          <h2 className=" md:text-2xl font-bold tracking-tight text-black">
             TOP 3 OF BEAUTY
           </h2>
           <Link
             href="/categories"
-            className="flex items-center gap-1 px-4 py-1.5 text-sm font-medium border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-1 px-1 md:px-4 py-1 md:py-1.5 text-sm font-medium border border-gray-200 rounded-full hover:bg-gray-50 transition-colors"
           >
             See All
             <svg

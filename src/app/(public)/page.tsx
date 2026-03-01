@@ -5,6 +5,7 @@ import DynamicSection from "@/components/pages/home/DynamicSection";
 import FeatureProducts from "@/components/pages/home/FeatureProducts";
 import NewsSection from "@/components/pages/home/NewsSection";
 import Slider from "@/components/pages/home/Slider";
+import VideoSlider from "@/components/pages/home/VideoSlider";
 
 export default function HomePage() {
   return (
@@ -12,8 +13,9 @@ export default function HomePage() {
       <Slider />
       <CategoriesSection />
       <FeatureProducts />
-      <DealsOffer />
       <BeautySection />
+      <VideoSlider />
+      <DealsOffer />
       <DynamicSection />
       <NewsSection />
     </>
