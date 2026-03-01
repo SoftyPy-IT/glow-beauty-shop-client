@@ -38,6 +38,7 @@ const CategoriesLayout = ({ slug }: CategoriesLayoutProps) => {
 
   const products = data?.data || [];
   const meta = data?.meta;
+  console.log("product ", products);
 
   const generateBreadcrumbs = (slug: string) => {
     const breadcrumbPaths = [

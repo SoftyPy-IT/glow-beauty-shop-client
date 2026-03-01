@@ -1,27 +1,26 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import { useGetAllOffersQuery } from "@/redux/features/storefront/storefront.api";
-import { IOffers } from "@/types/storefront.types";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Grid } from "swiper/modules";
-import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { Clock, Gift, Sparkles, Zap } from "lucide-react";
-import { IProduct } from "@/types/products.types";
-import formatPrice from "@/utils/formatPrice";
-import Link from "next/link";
-import ProductCardSkeleton from "../products/ProductCardSkeleton";
-import moment from "moment";
 import Card from "@/components/Card/Card";
-import { useMediaQuery } from "react-responsive";
 import CardSkeleton from "@/components/Card/CardSkeleton";
 import Container from "@/components/common/Container";
+import { useGetAllOffersQuery } from "@/redux/features/storefront/storefront.api";
+import { IProduct } from "@/types/products.types";
+import { IOffers } from "@/types/storefront.types";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Clock, Gift, Sparkles, Zap } from "lucide-react";
+import moment from "moment";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { Autoplay, Grid, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const DealsOffer: React.FC = () => {
   const { data: offers, isLoading, isError } = useGetAllOffersQuery(undefined);
-  console.log('deals data', offers);
-  const [remainingTimes, setRemainingTimes] = useState<{ [key: string]: number }>({});
+  console.log("deals data", offers);
+  const [remainingTimes, setRemainingTimes] = useState<{
+    [key: string]: number;
+  }>({});
   const [key, setKey] = useState(0);
   const data = offers?.data as IOffers[];
   const isSmallScreen = useMediaQuery({ query: "(max-width: 640px)" });
@@ -79,20 +78,11 @@ const DealsOffer: React.FC = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, [data]); // Only depend on data, not remainingTimes
+  }, [data]);
 
   if (isError || !offers) return null;
 
   if (!data || data.length === 0) return null;
-
-  const formatTime = (time: number): string => {
-    const duration = moment.duration(time);
-    const days = Math.floor(duration.asDays());
-    const hours = duration.hours();
-    const minutes = duration.minutes();
-    const seconds = duration.seconds();
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-  };
 
   const renderTimer = (time: number): React.ReactNode => {
     const duration = moment.duration(time);
@@ -112,21 +102,21 @@ const DealsOffer: React.FC = () => {
         <span className="text-rose-300 text-xl font-bold">:</span>
         <div className="flex flex-col items-center">
           <span className="text-xl sm:text-2xl md:text-3xl font-bold text-rose-600 bg-rose-50 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-            {hours.toString().padStart(2, '0')}
+            {hours.toString().padStart(2, "0")}
           </span>
           <span className="text-xs text-gray-500 mt-1">Hours</span>
         </div>
         <span className="text-rose-300 text-xl font-bold">:</span>
         <div className="flex flex-col items-center">
           <span className="text-xl sm:text-2xl md:text-3xl font-bold text-rose-600 bg-rose-50 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-            {minutes.toString().padStart(2, '0')}
+            {minutes.toString().padStart(2, "0")}
           </span>
           <span className="text-xs text-gray-500 mt-1">Mins</span>
         </div>
         <span className="text-rose-300 text-xl font-bold">:</span>
         <div className="flex flex-col items-center">
           <span className="text-xl sm:text-2xl md:text-3xl font-bold text-rose-600 bg-rose-50 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center">
-            {seconds.toString().padStart(2, '0')}
+            {seconds.toString().padStart(2, "0")}
           </span>
           <span className="text-xs text-gray-500 mt-1">Secs</span>
         </div>
@@ -162,7 +152,8 @@ const DealsOffer: React.FC = () => {
                       </h2>
                       <p className="text-rose-100 text-sm flex items-center gap-1">
                         <Sparkles className="w-4 h-4" />
-                        {offer.subTitle || "Exclusive beauty deals just for you"}
+                        {offer.subTitle ||
+                          "Exclusive beauty deals just for you"}
                       </p>
                     </div>
                   </div>
@@ -178,7 +169,9 @@ const DealsOffer: React.FC = () => {
                     ) : (
                       <div className="flex items-center gap-2 text-rose-100">
                         <Zap className="w-5 h-5" />
-                        <span className="font-medium">This offer has ended</span>
+                        <span className="font-medium">
+                          This offer has ended
+                        </span>
                       </div>
                     )}
                   </div>
@@ -191,7 +184,9 @@ const DealsOffer: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-500">
-                      {offer.products.length} {offer.products.length === 1 ? 'product' : 'products'} on sale
+                      {offer.products.length}{" "}
+                      {offer.products.length === 1 ? "product" : "products"} on
+                      sale
                     </span>
                   </div>
 
@@ -247,33 +242,33 @@ const DealsOffer: React.FC = () => {
                   >
                     {isLoading
                       ? Array.from({
-                        length: isSmallScreen ? 4 : isMediumScreen ? 6 : 8,
-                      }).map((_, idx) => (
-                        <SwiperSlide key={idx}>
-                          <CardSkeleton />
-                        </SwiperSlide>
-                      ))
+                          length: isSmallScreen ? 4 : isMediumScreen ? 6 : 8,
+                        }).map((_, idx) => (
+                          <SwiperSlide key={idx}>
+                            <CardSkeleton />
+                          </SwiperSlide>
+                        ))
                       : offer.products.map((product: IProduct) => (
-                        <SwiperSlide key={product._id}>
-                          <Card
-                            item={{
-                              id: product._id,
-                              name: product.name,
-                              code: product.code,
-                              price: product.price,
-                              img1: product.thumbnail,
-                              img2: product.images[0],
-                              slug: product.slug,
-                              category: product.category?.name,
-                              rating: product.rating,
-                              reviewCount: product.reviews.length,
-                              subCategory: product.subCategory?.name,
-                              mainCategory: product.mainCategory?.name,
-                              availableStock: product.quantity,
-                            }}
-                          />
-                        </SwiperSlide>
-                      ))}
+                          <SwiperSlide key={product._id}>
+                            <Card
+                              item={{
+                                id: product._id,
+                                name: product.name,
+                                code: product.code,
+                                price: product.price,
+                                img1: product.thumbnail,
+                                img2: product.images[0],
+                                slug: product.slug,
+                                category: product.category?.name,
+                                rating: product.rating,
+                                reviewCount: product.reviews.length,
+                                subCategory: product.subCategory?.name,
+                                mainCategory: product.mainCategory?.name,
+                                availableStock: product.quantity,
+                              }}
+                            />
+                          </SwiperSlide>
+                        ))}
                   </Swiper>
                 </div>
               </div>

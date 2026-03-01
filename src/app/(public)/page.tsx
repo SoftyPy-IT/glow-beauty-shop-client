@@ -1,3 +1,4 @@
+import BeautySection from "@/components/pages/home/BeautyBoothDeals";
 import CategoriesSection from "@/components/pages/home/CategoriesSection";
 import DealsOffer from "@/components/pages/home/DealsOffer";
 import DynamicSection from "@/components/pages/home/DynamicSection";
@@ -12,6 +13,7 @@ export default function HomePage() {
       <CategoriesSection />
       <FeatureProducts />
       <DealsOffer />
+      <BeautySection />
       <DynamicSection />
       <NewsSection />
     </>

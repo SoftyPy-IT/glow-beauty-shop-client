@@ -1,12 +1,12 @@
-import { FC, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { ShoppingBag, Star, Heart, Eye, Tag } from "lucide-react";
-import { changeItemQuantity, addToCart } from "@/redux/features/cart";
+import { addToCart, changeItemQuantity } from "@/redux/features/cart";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import formatPrice from "@/utils/formatPrice";
 import { truncate } from "lodash";
+import { ShoppingBag, Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
 
 interface ItemType {
   id: string;
@@ -57,8 +57,8 @@ const RatingStars: FC<{
               index < fullStars
                 ? "fill-amber-400 text-amber-400"
                 : index === fullStars && hasHalfStar
-                ? "fill-amber-400 text-amber-400"
-                : "fill-gray-200 text-gray-300"
+                  ? "fill-amber-400 text-amber-400"
+                  : "fill-gray-200 text-gray-300"
             } transition-colors`}
             strokeWidth={1}
           />
