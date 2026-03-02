@@ -145,8 +145,9 @@ const HoverPopover: React.FC<HoverPopoverProps> = ({ category }) => {
           <>
             <Popover.Button
               ref={buttonRef}
-              className={`inline-flex uppercase items-center gap-x-1 text-pink-600 hover:text-rose-600 font-medium outline-none transition duration-200 rounded-full px-3 py-1.5 ${isOpen ? "bg-pink-50 text-rose-600" : ""
-                }`}
+              className={`inline-flex uppercase items-center gap-x-1 text-pink-600 hover:text-rose-600 font-medium outline-none transition duration-200 rounded-full px-3 py-1.5 ${
+                isOpen ? "bg-pink-50 text-rose-600" : ""
+              }`}
               onClick={() => setIsOpen(!isOpen)}
               onTouchStart={handleTouchStart}
               aria-expanded={isOpen}
@@ -163,8 +164,9 @@ const HoverPopover: React.FC<HoverPopoverProps> = ({ category }) => {
                 {category.name}
               </Link>
               <ChevronDown
-                className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""
-                  }`}
+                className={`h-3 w-3 transition-transform ${
+                  isOpen ? "rotate-180" : ""
+                }`}
                 aria-hidden="true"
               />
             </Popover.Button>
@@ -218,10 +220,11 @@ const HoverPopover: React.FC<HoverPopoverProps> = ({ category }) => {
 
                   {/* Right Side - Categories (span-12 on small, span-8/9 on larger) */}
                   <div
-                    className={`col-span-12 ${category.image
+                    className={`col-span-12 ${
+                      category.image
                         ? "md:col-span-8 lg:col-span-9"
                         : "col-span-12"
-                      }`}
+                    }`}
                   >
                     {category.categories && category.categories.length > 0 && (
                       <ColumnizedCategories
@@ -400,9 +403,10 @@ const ColumnizedCategories: React.FC<ColumnizedCategoriesProps> = ({
               space-y-3
               py-4
               px-2
-              ${columnIndex < columnsCount - 1
-                ? "md:border-r border-pink-100"
-                : ""
+              ${
+                columnIndex < columnsCount - 1
+                  ? "md:border-r border-pink-100"
+                  : ""
               }
             `}
           >
@@ -443,9 +447,10 @@ const ColumnizedCategories: React.FC<ColumnizedCategoriesProps> = ({
                         <li
                           key={subCat._id}
                           className={`
-                            ${index < (category.subCategories?.length ?? 0) - 1
-                              ? "border-b border-pink-50"
-                              : ""
+                            ${
+                              index < (category.subCategories?.length ?? 0) - 1
+                                ? "border-b border-pink-50"
+                                : ""
                             }
                             py-1
                           `}

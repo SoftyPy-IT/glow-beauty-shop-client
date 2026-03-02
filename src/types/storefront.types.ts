@@ -47,6 +47,7 @@ export interface IOffers {
   status: "active" | "inactive";
   createdAt: Date;
   updatedAt: Date;
+  discountPercentage: any
 }
 
 export enum SectionType {
