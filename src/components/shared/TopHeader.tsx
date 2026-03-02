@@ -90,7 +90,7 @@ const TopHeader = ({ session }: TopHeaderProps) => {
       await logoutUser(undefined);
       dispatch(logout());
       window.location.href = "/login";
-    } catch (error) { }
+    } catch (error) {}
   };
 
   if (isNavigationLoading) return <Preloader />;

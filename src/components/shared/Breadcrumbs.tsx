@@ -5,7 +5,7 @@ interface Page {
   name: string;
   href?: string;
   current: boolean;
-  onClick?: () => void; // Optional onClick handler
+  onClick?: () => void;
 }
 
 interface BreadcrumbProps {
@@ -45,10 +45,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ pages }) => {
             <Link
               href={page.href || "#"}
               onClick={page.onClick}
-              className={`ml-1 sm:ml-2 text-xs sm:text-sm font-medium transition-colors duration-200 ${page.current
-                ? "text-rose-600"
-                : "text-pink-500 hover:text-rose-500"
-                }`}
+              className={`ml-1 sm:ml-2 text-xs sm:text-sm font-medium transition-colors duration-200 ${
+                page.current
+                  ? "text-rose-600"
+                  : "text-pink-500 hover:text-rose-500"
+              }`}
               aria-current={page.current ? "page" : undefined}
             >
               {page.name}
@@ -59,6 +60,5 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ pages }) => {
     </nav>
   );
 };
-
 
 export default Breadcrumb;
