@@ -178,7 +178,7 @@ const MobileMegaMenu = ({
               <div className="sticky top-0 z-10 flex items-center justify-between bg-white px-4 py-4 shadow">
                 <div className="flex items-center">
                   <Image
-                    src={logoSrc}
+                    src="/logo.png"
                     alt="Logo"
                     width={120}
                     height={120}

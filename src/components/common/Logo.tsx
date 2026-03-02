@@ -13,12 +13,7 @@ const Logo = () => {
       href="/"
       className="flex justify-center py-2 items-center rounded-md focus:outline-none"
     >
-      <Image
-        src={data ? data.logo : "/logo.png"}
-        alt="E-soft logo"
-        width={100}
-        height={100}
-      />
+      <Image src="/logo.png" alt="E-soft logo" width={100} height={100} />
     </Link>
   );
 };

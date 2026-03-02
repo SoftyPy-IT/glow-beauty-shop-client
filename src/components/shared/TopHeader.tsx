@@ -18,14 +18,12 @@ import {
   Settings,
   User,
   X,
-  Heart,
-  Sparkles,
 } from "lucide-react";
 
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CartItem from "../Cart/CartItem";
 import Logo from "../common/Logo";
 import Preloader from "../common/Preloader";
@@ -35,6 +33,7 @@ import MobileMegaMenu from "./MobileMegaMenu";
 import WishlistIcon from "./WishlistIcon";
 import { useAppSelector } from "@/redux/hooks";
 import { selectStorefrontData } from "@/redux/features/storefront/storeSlice";
+import InlineSearch from "./InlineSearchBar";
 
 const profileLinks = [
   {
@@ -60,8 +59,9 @@ interface TopHeaderProps {
 
 const TopHeader = ({ session }: TopHeaderProps) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const [logoutUser, { isLoading }] = useLogoutMutation();
   const appData = useAppSelector(selectStorefrontData);
@@ -71,18 +71,32 @@ const TopHeader = ({ session }: TopHeaderProps) => {
   const navigation = data as any;
 
   useEffect(() => {
-    if (showSearch || showProfileMenu) {
+    if (showProfileMenu) {
       const closeDropdowns = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
         if (!target.closest(".header-dropdown")) {
-          setShowSearch(false);
           setShowProfileMenu(false);
         }
       };
       document.addEventListener("click", closeDropdowns);
       return () => document.removeEventListener("click", closeDropdowns);
     }
-  }, [showSearch, showProfileMenu]);
+  }, [showProfileMenu]);
+
+  // Handle click outside for search
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -124,56 +138,58 @@ const TopHeader = ({ session }: TopHeaderProps) => {
   ];
 
   return (
-    <div className="fixed w-full z-50 bg-gradient-to-r from-rose-50 to-pink-50 top-0 left-0 transition-colors duration-300 shadow-sm">
+    <div className="fixed w-full z-40 bg-gradient-to-r from-rose-50 to-pink-50 top-0 left-0 transition-colors duration-300 shadow-sm">
       {/* Top Section */}
-      <div className="border-b border-rose-200 bg-white/80 backdrop-blur-sm">
+      <div className="border-b border-rose-200 bg-white/80 backdrop-blur-sm relative z-20">
         <div className="container mx-auto px-4">
-          <div className="py-3 lg:py-5 flex items-center justify-between">
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 hover:bg-rose-100 rounded-full transition-colors"
-              aria-label="Toggle mobile menu"
-            >
-              <Menu className="w-6 h-6 text-pink-600" />
-            </button>
+          <div className="py-3 lg:py-4 flex items-center justify-between">
+            {/* Left Section - Logo + Social */}
+            <div className="flex items-center space-x-4">
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2 hover:bg-rose-100 rounded-full transition-colors"
+                aria-label="Toggle mobile menu"
+              >
+                <Menu className="w-6 h-6 text-pink-600" />
+              </button>
 
-            {/* Social Icons - Hidden on Mobile */}
-            <div className="hidden lg:flex items-center space-x-3">
-              {socialLinks.map(({ Icon, href }, index) => (
-                <Link
-                  key={index}
-                  href={href}
-                  className="w-8 h-8 rounded-full bg-white border border-pink-200 flex items-center justify-center hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 group"
-                >
-                  <Icon />
-                </Link>
-              ))}
+              {/* Social Icons - Hidden on Mobile */}
+              <div className="hidden lg:flex items-center space-x-2">
+                {socialLinks.map(({ Icon, href }, index) => (
+                  <Link
+                    key={index}
+                    href={href}
+                    className="w-8 h-8 rounded-full bg-white border border-pink-200 flex items-center justify-center hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 group"
+                  >
+                    <Icon />
+                  </Link>
+                ))}
+              </div>
             </div>
 
-            {/* Center Logo */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <div className="transform hover:scale-105 transition-transform duration-300">
-                <Logo />
-              </div>
+            {/* Center - Inline Search Bar (Visible on desktop) - Increased width */}
+            <div
+              ref={searchRef}
+              className="hidden lg:block flex-1 max-w-2xl mx-8 relative z-30"
+            >
+              <InlineSearch
+                isOpen={isSearchOpen}
+                onOpen={() => setIsSearchOpen(true)}
+                onClose={() => setIsSearchOpen(false)}
+              />
             </div>
 
             {/* Right Controls */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              {/* Search */}
-              <div className="header-dropdown relative">
-                <button
-                  className="w-9 h-9 rounded-full bg-white border border-pink-200 flex items-center justify-center hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 group"
-                  onClick={() => setShowSearch(!showSearch)}
-                  aria-label="Toggle search"
-                >
-                  {showSearch ? (
-                    <X className="w-4 h-4 text-pink-500 group-hover:text-white" />
-                  ) : (
-                    <Search className="w-4 h-4 text-pink-500 group-hover:text-white" />
-                  )}
-                </button>
-              </div>
+              {/* Mobile Search Icon */}
+              <button
+                className="lg:hidden w-9 h-9 rounded-full bg-white border border-pink-200 flex items-center justify-center hover:bg-pink-500 hover:border-pink-500 hover:text-white transition-all duration-300 group"
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                aria-label="Toggle search"
+              >
+                <Search className="w-4 h-4 text-pink-500 group-hover:text-white" />
+              </button>
 
               {/* Wishlist */}
               <div className="hidden sm:block">
@@ -267,9 +283,9 @@ const TopHeader = ({ session }: TopHeaderProps) => {
         </div>
       </div>
 
-      {/* Bottom Section - Categories */}
+      {/* Bottom Section - Categories - Lower z-index */}
       {!isMobileMenuOpen && (
-        <div className="hidden lg:block border-b border-pink-100 bg-white/90 backdrop-blur-sm">
+        <div className="hidden lg:block border-b border-pink-100 bg-white/90 backdrop-blur-sm relative z-10">
           <div className="container mx-auto px-4">
             <div className="py-2">
               <nav className="hidden lg:flex items-center justify-center space-x-8">
@@ -280,7 +296,8 @@ const TopHeader = ({ session }: TopHeaderProps) => {
         </div>
       )}
 
-      <div className="lg:hidden flex justify-center items-center w-full overflow-hidden bg-white/90 backdrop-blur-sm border-t border-pink-100">
+      {/* Mobile Categories - Lower z-index */}
+      <div className="lg:hidden flex justify-center items-center w-full overflow-hidden bg-white/90 backdrop-blur-sm border-t border-pink-100 relative z-10">
         <ScrollShadow
           hideScrollBar
           orientation="horizontal"
@@ -308,7 +325,7 @@ const TopHeader = ({ session }: TopHeaderProps) => {
             COMBO
           </Link>
 
-          {navigation.map((category: any) => (
+          {navigation?.map((category: any) => (
             <Link
               key={category._id}
               href={`/categories/${category.name.toLowerCase()}`}
@@ -321,10 +338,14 @@ const TopHeader = ({ session }: TopHeaderProps) => {
         </ScrollShadow>
       </div>
 
-      {/* Search Overlay */}
-      {showSearch && <HeaderSearchBar onClose={() => setShowSearch(false)} />}
+      {/* Mobile Search Modal - Only shown on mobile */}
+      {isSearchOpen && (
+        <div className="lg:hidden relative z-50">
+          <HeaderSearchBar onClose={() => setIsSearchOpen(false)} />
+        </div>
+      )}
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Highest z-index */}
       <MobileMegaMenu
         navigation={navigation}
         isOpen={isMobileMenuOpen}
